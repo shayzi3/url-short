@@ -1,5 +1,5 @@
 from typing_extensions import Self
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 from app.core.security import sync_hashed_password
 
@@ -8,7 +8,7 @@ from app.core.security import sync_hashed_password
 class SignUpModel(BaseModel):
      username: str
      password: str
-     phone: int
+     email: EmailStr
      
      
      def password_hashed(self) -> Self:

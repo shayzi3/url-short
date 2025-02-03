@@ -72,7 +72,6 @@ class TimeoutMiddleware(BaseHTTPMiddleware):
 def include_middleware(app: FastAPI) -> None:
      __middlewares__ = [
           AccessMiddleware,
-          TimeoutMiddleware,
      ]
      for middle in __middlewares__:
           app.add_middleware(middle)

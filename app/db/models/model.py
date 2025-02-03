@@ -22,7 +22,7 @@ class User(Base):
      
      username: Mapped[str] = mapped_column(primary_key=True, unique=True)
      password: Mapped[str] = mapped_column()
-     phone: Mapped[int] = mapped_column(BigInteger)
+     email: Mapped[str] = mapped_column()
      created_at: Mapped[datetime] = mapped_column(default=datetime.now())
      is_verifed: Mapped[bool] = mapped_column(default=False)
      is_banned: Mapped[bool] = mapped_column(default=False)

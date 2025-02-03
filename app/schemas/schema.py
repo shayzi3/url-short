@@ -4,7 +4,7 @@ import json
 
 from typing_extensions import Self
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from pydantic import BaseModel, field_validator
 
 
@@ -88,3 +88,8 @@ class TokenPayloadModel(BaseModel):
      is_verifed: bool
      exp: datetime
      iat: datetime
+     
+     @property
+     def verifed_is_true(self) -> dict[str, Any]:
+          self.is_verifed = True
+          return self.__dict__
