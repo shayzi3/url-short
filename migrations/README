@@ -1,0 +1,13 @@
+Generic single-database configuration with an async dbapi.
+
+flags for alembic revision:
+- initial: Самая первая ревизия
+- fix: Исправление чего-то. Без добавления нового
+- new: Новая функциональность
+- fixnew: Исправление и добавление новой функциональности
+
+Пример: alembic revision --autogenerate -m "fix"
+В документации созданной ревизии прописывается конкретно то, что было исправлено.
+
+Далее в файл alembic_log.md прописыывается:
+revision_id NameSurname_or_Email flag date
