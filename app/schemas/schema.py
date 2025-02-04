@@ -64,21 +64,24 @@ class UrlModel(BaseModel):
 class ApiKeyModel(BaseModel):
      key: str
      exp: float
-     user: UserForUrlModel
+     user_name: str
      
-     @field_validator("user")
-     @classmethod
-     def user_validator(cls, user: User) -> UserForUrlModel | None:
-          if user is None:
-               return None
-          return UserForUrlModel(**user.__dict__)
+     @property
+     def where(self) -> dict[str, Any]:
+          return {"user_name": self.user_name}
+     
+   
+class UserForApiKeyModel(BaseModel):
+     username: str
+     prefix: str
      
      
      
 class UserForUrlModel(BaseModel):
      username: str
-     email: str
      created_at: datetime
+     is_banned: bool
+     is_verifed: bool
      
      
 class UrlForUserModel(BaseModel):
