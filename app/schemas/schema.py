@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from typing_extensions import Self
+from typing_extensions import Self, Sequence
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 from pydantic import BaseModel, field_validator
@@ -93,3 +93,11 @@ class TokenPayloadModel(BaseModel):
      def verifed_is_true(self) -> dict[str, Any]:
           self.is_verifed = True
           return self.__dict__
+     
+     @property
+     def redis_value(self) -> Sequence[str]:
+          return [f"user:{self.username}"]
+     
+     @property
+     def redis_str_value(self) -> str:
+          return f"user:{self.username}"

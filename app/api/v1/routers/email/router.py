@@ -1,11 +1,11 @@
 from typing import Annotated
-from fastapi import APIRouter, BackgroundTasks, Depends, Response
+from fastapi import APIRouter, BackgroundTasks, Depends, Response, Security
 
 from app.api.dependencies.email import account_already_verifed
 from app.core.security import access_security
 from app.schemas import ResponseModel, TokenPayloadModel
 from .service import EmailService, get_email_service
-from .schema import Email, Code
+from .schema import Code
 
 
 
@@ -14,29 +14,27 @@ email_router = APIRouter(prefix="/api/v1/email", tags=["Email"], dependencies=[D
 
 @email_router.post("/send")
 async def send_email(
-     email: Email,
-     current_user: Annotated[TokenPayloadModel, Depends(access_security)],
+     current_user: Annotated[TokenPayloadModel, Security(access_security)],
      service: Annotated[EmailService, Depends(get_email_service)],
      background_tasks: BackgroundTasks,
 ) -> ResponseModel:
      return await service.send_email(
-          email=email,
-          username=current_user.username,
+          current_user=current_user,
           bg_task=background_tasks
      )
      
      
      
-@email_router.post("/check}")
+@email_router.post("/check")
 async def check_email(
      code: Code,
-     current_user: Annotated[TokenPayloadModel, Depends(access_security)],
+     current_user: Annotated[TokenPayloadModel, Security(access_security)],
      service: Annotated[EmailService, Depends(get_email_service)],
      response: Response
 ) -> ResponseModel:
      status_verify, answer_model = await service.check_email(
           code=code.code,
-          username=current_user.username
+          current_user=current_user
      )
      if status_verify is True:
           new_token = await access_security.create_token(

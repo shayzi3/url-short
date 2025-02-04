@@ -1,12 +1,11 @@
 from fastapi import HTTPException, status
 
-from app.schemas import TokenModel, UserModel
+from app.schemas import TokenModel, UserModel, TokenPayloadModel
 from app.db.bases import UserService
 from app.core.security import access_security
 from app.core.security import check_password
 from app.services.redis import RedisPool
 from .schema import SignUpModel, LogInModel
-
 
 
 
@@ -64,9 +63,9 @@ class AuthService:
           return token
      
      
-     async def get_user(self, name: str | None, current_username: str) -> UserModel:
+     async def get_user(self, name: str | None, current_user: TokenPayloadModel) -> UserModel:
           if name is None:
-               name = current_username
+               name = current_user.username
                
           from_redis = await self.redis.get(f"user:{name}")
           if from_redis is not None:

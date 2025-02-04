@@ -1,12 +1,12 @@
 from typing import Annotated
-from fastapi import Depends, HTTPException, status
+from fastapi import Security, HTTPException, status
 
 from app.schemas import TokenPayloadModel
 from app.core.security import access_security
 
 
 async def account_already_verifed(
-     current_user: Annotated[TokenPayloadModel, Depends(access_security)]
+     current_user: Annotated[TokenPayloadModel, Security(access_security)]
 ) -> None:
      if current_user.is_verifed is True:
           raise HTTPException(

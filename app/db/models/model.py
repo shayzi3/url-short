@@ -3,12 +3,12 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy import (
      ForeignKey,
-     BigInteger,
 )
 from app.schemas import (
      UserModel, 
      UrlModel, 
 )
+from app.core.security import generate_prefix
 
 
 
@@ -26,6 +26,7 @@ class User(Base):
      created_at: Mapped[datetime] = mapped_column(default=datetime.now())
      is_verifed: Mapped[bool] = mapped_column(default=False)
      is_banned: Mapped[bool] = mapped_column(default=False)
+     prefix: Mapped[str] = mapped_column(default=generate_prefix())
      api_key: Mapped[str] = mapped_column(nullable=True)
      urls: Mapped[list["Url"]] = relationship(back_populates="user", uselist=True, lazy="joined")
           

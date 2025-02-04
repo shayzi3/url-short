@@ -55,5 +55,5 @@ async def get_user(
 ) -> UserModel:
      return await service.get_user(
           name=username, 
-          current_username=current_user.username
+          current_user=current_user
      )
