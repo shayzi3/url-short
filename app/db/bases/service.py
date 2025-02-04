@@ -97,7 +97,9 @@ class ParentService(Service, Generic[PYDANTIC_MODEL], Session):
           async with self.session.begin() as session:
                sttm = update(self.model).filter_by(**where).values(**extras)
                await session.execute(sttm)
-               await RedisPool().delete(*redis_values)
+               
+               if redis_values:
+                    await RedisPool().delete(*redis_values)
           
           
      async def delete(
@@ -108,6 +110,8 @@ class ParentService(Service, Generic[PYDANTIC_MODEL], Session):
           async with self.session.begin() as session:
                sttm = delete(self.model).filter_by(**where)
                await session.exevute(sttm)
-               await RedisPool().delete(*redis_values)
+               
+               if redis_values:
+                    await RedisPool().delete(*redis_values)
                
      

@@ -54,7 +54,7 @@ class EmailService:
           )
           if check_code is True:
                await self.user_service.update(
-                    where={"username": current_user.username},
+                    where=current_user.where,
                     redis_values=current_user.redis_value,
                     is_verifed=True
                )

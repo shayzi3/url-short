@@ -5,7 +5,8 @@ from .schema import (
      TokenModel,
      TokenPayloadModel,
      UserForUrlModel,
-     UrlForUserModel
+     UrlForUserModel,
+     ApiKeyModel
 )
 
 
@@ -16,5 +17,6 @@ __all__ = [
      "TokenModel",
      "TokenPayloadModel",
      "UserForUrlModel",
-     "UrlForUserModel"
+     "UrlForUserModel",
+     "ApiKeyModel"
 ]

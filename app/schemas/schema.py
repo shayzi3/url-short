@@ -59,11 +59,25 @@ class UrlModel(BaseModel):
                return None
           return UserForUrlModel(**user.__dict__)
      
+    
+     
+class ApiKeyModel(BaseModel):
+     key: str
+     exp: float
+     user: UserForUrlModel
+     
+     @field_validator("user")
+     @classmethod
+     def user_validator(cls, user: User) -> UserForUrlModel | None:
+          if user is None:
+               return None
+          return UserForUrlModel(**user.__dict__)
+     
      
      
 class UserForUrlModel(BaseModel):
      username: str
-     phone: int
+     email: str
      created_at: datetime
      
      
@@ -79,6 +93,7 @@ class TokenModel(BaseModel):
      
      def __str__(self) -> str:
           return self.token
+     
      
      
      
@@ -101,3 +116,7 @@ class TokenPayloadModel(BaseModel):
      @property
      def redis_str_value(self) -> str:
           return f"user:{self.username}"
+     
+     @property
+     def where(self) -> dict[str, Any]:
+          return {"username": self.username}
