@@ -8,7 +8,8 @@ from app.api.middlewares import include_middleware
 
 
 app = FastAPI(
-     title="URLShort"
+     title="URLShort",
+     version="1.0.0"
 )
 include_routers(app)
 include_middleware(app)

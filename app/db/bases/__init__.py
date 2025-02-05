@@ -1,10 +1,10 @@
-from .user_service import UserService
-from .url_service import UrlService
-from .api_key_service import APIKeyService
+from .user_repository import UserRepository
+from .url_repository import UrlRepository
+from .api_key_repository import APIKeyRepository
 
 
 __all__ = [
-     "UserService",
-     "UrlService",
-     "APIKeyService",
+     "UserRepository",
+     "UrlRepository",
+     "APIKeyRepository",
 ]

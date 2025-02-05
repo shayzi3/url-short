@@ -13,7 +13,7 @@ ORM_MODELS = Union[User, Url, None]
 
 
 
-class Service(ABC, Generic[PYDANTIC_MODEL]):
+class Repository(ABC, Generic[PYDANTIC_MODEL]):
      
      @abstractmethod
      async def read(
@@ -53,7 +53,7 @@ class Service(ABC, Generic[PYDANTIC_MODEL]):
      
      
 
-class ParentService(Service, Generic[PYDANTIC_MODEL], Session):
+class ParentRepository(Repository, Generic[PYDANTIC_MODEL], Session):
      model: ORM_MODELS = None
      
      

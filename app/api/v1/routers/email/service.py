@@ -1,6 +1,6 @@
 from fastapi import BackgroundTasks, status
 
-from app.db.bases import UserService
+from app.db.bases import UserRepository
 from app.services.redis import RedisPool
 from app.services.email import EmailSender
 from app.schemas import ResponseModel, TokenPayloadModel
@@ -9,7 +9,7 @@ from app.schemas import ResponseModel, TokenPayloadModel
 class EmailService:
      def __init__(
           self,
-          user_service: UserService,
+          user_service: UserRepository,
           email_sender: EmailSender,
           redis: RedisPool,
           
@@ -64,7 +64,7 @@ class EmailService:
           
 async def get_email_service() -> EmailService:
      return EmailService(
-          user_service=UserService(),
+          user_service=UserRepository(),
           email_sender=EmailSender(),
           redis=RedisPool()
      )

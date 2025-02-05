@@ -2,16 +2,16 @@ from fastapi import HTTPException, status
 
 from app.core.security import generate_api_key, hashed_password, generate_prefix
 from app.schemas import TokenPayloadModel, ResponseModel
-from app.db.bases import APIKeyService, UserService
+from app.db.bases import APIKeyRepository, UserRepository
 from .schema import APIKey
 
 
-class ApiKeyService:
+class APIKeyService:
      
      def __init__(
           self,
-          api_service: APIKeyService,
-          user_service: UserService
+          api_service: APIKeyRepository,
+          user_service: UserRepository
      ) -> None:
           self.user_service = user_service
           self.api_service = api_service
@@ -76,7 +76,7 @@ class ApiKeyService:
      
      
 async def get_api_key_service() -> APIKeyService:
-     return ApiKeyService(
-          api_service=APIKeyService(),
-          user_service=UserService()
+     return APIKeyService(
+          api_service=APIKeyRepository(),
+          user_service=UserRepository()
      )

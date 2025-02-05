@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 
 from app.schemas import TokenModel, UserModel, TokenPayloadModel
-from app.db.bases import UserService
+from app.db.bases import UserRepository
 from app.core.security import access_security
 from app.core.security import check_password
 from app.services.redis import RedisPool
@@ -11,7 +11,7 @@ from .schema import SignUpModel, LogInModel
 
 
 class AuthService:
-     def __init__(self, user_service: UserService, redis: RedisPool):
+     def __init__(self, user_service: UserRepository, redis: RedisPool):
           self.user_service = user_service
           self.redis = redis
           
@@ -89,6 +89,6 @@ class AuthService:
           
 async def get_auth_service() -> AuthService:
      return AuthService(
-          user_service=UserService(),
+          user_service=UserRepository(),
           redis=RedisPool()
      )
