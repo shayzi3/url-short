@@ -11,7 +11,7 @@ Payload = Union[TokenPayloadModel, UserForApiKeyModel]
 
 async def get_access_or_api(request: Request) -> Payload:
      access_token = request.cookies.get("access_token")
-     api_token = request.headers.get("API")
+     api_token = request.headers.get("x-api-key")
      
      if access_token is not None:
           return await access_security(request)

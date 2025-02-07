@@ -48,7 +48,7 @@ async def login(
 
 
 
-@user_router.get("/")
+@user_router.get("/", dependencies=[Depends(Timeout(route="get_user", seconds=1))])
 async def get_user(
      current_user: Annotated[TokenPayloadModel, Security(access_security)],
      service: Annotated[AuthService, Depends(get_auth_service)],

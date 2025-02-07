@@ -21,7 +21,7 @@ def generate_prefix() -> str:
 
 
 async def generate_api_key(prefix: str) -> str:
-     return prefix + "".join([random.choice(symbols) for _ in range(10)])
+     return prefix + "".join([random.choice(symbols) for _ in range(40)])
 
 
 
@@ -57,7 +57,7 @@ class RequestAPIKey:
      
      
      async def __call__(self, request: Request):
-          key = request.headers.get("API")
+          key = request.headers.get("x-api-key")
           if key is None:
                raise self.__error
           return await self.decode_api_key(key)

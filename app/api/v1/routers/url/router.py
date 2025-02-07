@@ -4,7 +4,6 @@ from fastapi.responses import RedirectResponse
 
 from app.api.dependencies.url import get_access_or_api, Payload
 from app.api.dependencies.timeout import Timeout
-from app.schemas import ResponseModel
 from .service import UrlService, get_url_service
 from .schema import UserSendUrl, ReturnUrl
 
@@ -38,6 +37,4 @@ async def get_url_by_id(
      service: Annotated[UrlService, Depends(get_url_service)]
 ) -> RedirectResponse:
      redirect_url = await service.get_url_by_id(id=url_id)
-     if isinstance(redirect_url, ResponseModel):
-          return redirect_url
      return RedirectResponse(url=redirect_url)

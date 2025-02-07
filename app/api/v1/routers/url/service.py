@@ -2,7 +2,6 @@ from fastapi import status, HTTPException
 
 from app.api.dependencies.url import Payload
 from app.core.security import generate_prefix
-from app.schemas import ResponseModel
 from app.db.bases import UrlRepository
 from app.services.redis import RedisPool
 from .schema import ReturnUrl
@@ -40,17 +39,14 @@ class UrlService:
           
           
           
-     async def get_url_by_id(self, id: str) -> str | ResponseModel:
+     async def get_url_by_id(self, id: str) -> str:
           url_redis = await self.redis.get(f"url:{id}")
           if url_redis is not None:
                return url_redis.decode()
           
           url_exists = await self.url_repository.read(id=id)
           if url_exists is None:
-               return ResponseModel(
-                    message="This link not valid",
-                    status=status.HTTP_404_NOT_FOUND
-               )
+               return "http://127.0.0.1:8000/not_found"
           
           await self.redis.set(
                name=f"url:{id}",

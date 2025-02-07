@@ -50,7 +50,7 @@ class Timeout:
      
      
      def time(self) -> datetime:
-          return datetime.now() + timedelta(**self.config)
+          return datetime.utcnow() + timedelta(**self.config)
           
           
      async def __call__(self, request: Request) -> None:

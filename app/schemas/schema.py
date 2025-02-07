@@ -25,7 +25,7 @@ class UserModel(BaseModel):
      is_verifed: bool
      is_banned: bool
      created_at: datetime
-     urls: list
+     urls: list # list[Url]
      
      
      @field_validator("urls")
@@ -57,7 +57,7 @@ class UserModel(BaseModel):
 class UrlModel(BaseModel):
      id: str
      url: str
-     user: Any
+     user: Any # User
      
      @field_validator("user")
      @classmethod
