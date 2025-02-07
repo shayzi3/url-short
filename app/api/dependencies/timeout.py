@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 from typing import Any
+from datetime import datetime, timedelta
 from fastapi import HTTPException, status, Request
 
 
@@ -18,6 +18,7 @@ class Timeout:
           days: float = 0,
           weeks: float = 0
      ) -> None:
+          
           self.route = route
           self.microseconds = microseconds
           self.milliseconds = milliseconds
@@ -38,7 +39,7 @@ class Timeout:
                if (isinstance(value, int) is True) and (value != 0):
                     kwargs[key] = value
           return kwargs
-          
+     
           
      @property
      def detail(self) -> str:
@@ -47,28 +48,23 @@ class Timeout:
                string += f" {value} {key}"
           return string
      
-          
-     async def get_time(self) -> datetime:
+     
+     def time(self) -> datetime:
           return datetime.now() + timedelta(**self.config)
           
           
      async def __call__(self, request: Request) -> None:
           client = request.client.host
-                    
+           
           if client not in self.users[self.route].keys():
-               self.users[self.route][client] = await self.get_time()
+               self.users[self.route][client] = self.time()
                return None
           
           if datetime.utcnow() > self.users[self.route][client]:
-               self.users[self.route][client] = await self.get_time()
+               self.users[self.route][client] = self.time()
                return None
           
           raise HTTPException(
                detail=self.detail,
                status_code=status.HTTP_408_REQUEST_TIMEOUT
           )
-          
-          
-          
-          
-          

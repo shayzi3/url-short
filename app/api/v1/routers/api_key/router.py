@@ -13,7 +13,7 @@ api_key_router = APIRouter(prefix="/api/v1/key", tags=["API Key"])
 
 
 
-@api_key_router.get(path="/", dependencies=[Depends(Timeout(minutes=5, route="get_key"))])
+@api_key_router.get(path="/", dependencies=[Depends(Timeout(route="get_key", minutes=5))])
 async def get_api_key(
      current_user: Annotated[TokenPayloadModel, Security(access_security)],
      service: Annotated[APIKeyService, Depends(get_api_key_service)]
@@ -22,7 +22,7 @@ async def get_api_key(
      
 
 
-@api_key_router.patch(path="/", dependencies=[Depends(Timeout(minutes=5, route="patch_key"))])
+@api_key_router.patch(path="/", dependencies=[Depends(Timeout(route="patch_key", minutes=5))])
 async def update_api_key(
      current_user: Annotated[TokenPayloadModel, Security(access_security)],
      service: Annotated[APIKeyService, Depends(get_api_key_service)]
@@ -31,7 +31,7 @@ async def update_api_key(
      
  
      
-@api_key_router.delete(path="/", dependencies=[Depends(Timeout(minutes=3, route="del_key"))])
+@api_key_router.delete(path="/", dependencies=[Depends(Timeout(route="del_key", minutes=3))])
 async def delete_api_key(
      current_user: Annotated[TokenPayloadModel, Security(access_security)],
      service: Annotated[APIKeyService, Depends(get_api_key_service)]

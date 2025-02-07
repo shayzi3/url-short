@@ -25,7 +25,8 @@ class UserModel(BaseModel):
      is_verifed: bool
      is_banned: bool
      created_at: datetime
-     urls: list[UrlForUserModel]
+     urls: list
+     
      
      @field_validator("urls")
      @classmethod
@@ -35,6 +36,9 @@ class UserModel(BaseModel):
      
      def to_redis(self) -> str:
           self.created_at = self.created_at.timestamp()
+          
+          if self.urls:
+               self.urls = [url.to_redis() for url in self.urls]
           return json.dumps(self.__dict__)
      
      
@@ -43,6 +47,9 @@ class UserModel(BaseModel):
           model = json.loads(obj)
           
           model["created_at"] = datetime.fromtimestamp(model["created_at"])
+          
+          if model["urls"]:
+               model["urls"] = [UrlForUserModel.from_redis(obj) for obj in model["urls"]]
           return cls(**model)
      
      
@@ -50,7 +57,7 @@ class UserModel(BaseModel):
 class UrlModel(BaseModel):
      id: str
      url: str
-     user: UserForUrlModel | None
+     user: Any
      
      @field_validator("user")
      @classmethod
@@ -59,7 +66,7 @@ class UrlModel(BaseModel):
                return None
           return UserForUrlModel(**user.__dict__)
      
-    
+     
      
 class ApiKeyModel(BaseModel):
      key: str
@@ -70,6 +77,7 @@ class ApiKeyModel(BaseModel):
      def where(self) -> dict[str, Any]:
           return {"user_name": self.user_name}
      
+   
    
 class UserForApiKeyModel(BaseModel):
      username: str
@@ -84,9 +92,20 @@ class UserForUrlModel(BaseModel):
      is_verifed: bool
      
      
+     
 class UrlForUserModel(BaseModel):
      id: str
      url: str
+     
+     
+     def to_redis(self) -> str:
+          return json.dumps(self.__dict__)
+     
+     
+     @classmethod
+     def from_redis(cls, obj: str) -> Self:
+          model = json.loads(obj)
+          return cls(**model)
      
      
      

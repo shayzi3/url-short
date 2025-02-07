@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, BackgroundTasks, Depends, Response, Security
 
+from app.api.dependencies.timeout import Timeout
 from app.api.dependencies.email import account_already_verifed
 from app.core.security import access_security
 from app.schemas import ResponseModel, TokenPayloadModel
@@ -25,7 +26,7 @@ async def send_email(
      
      
      
-@email_router.post("/check")
+@email_router.post("/check", dependencies=[Depends(Timeout(route="email_check", seconds=2))])
 async def check_email(
      code: Code,
      current_user: Annotated[TokenPayloadModel, Security(access_security)],

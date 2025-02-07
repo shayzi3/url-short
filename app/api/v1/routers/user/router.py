@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, Response, Security
 
+from app.api.dependencies.timeout import Timeout
 from app.core.security import access_security
 from app.schemas import TokenModel, TokenPayloadModel, UserModel
 from .schema import SignUpModel, LogInModel
@@ -11,7 +12,7 @@ from .service import get_auth_service, AuthService
 user_router = APIRouter(prefix="/api/v1/user", tags=["User"])
 
 
-@user_router.post("/signup/")
+@user_router.post("/signup/", dependencies=[Depends(Timeout(route="signup", seconds=3))])
 async def signup(
      register_data: SignUpModel,
      service: Annotated[AuthService, Depends(get_auth_service)],
@@ -29,7 +30,7 @@ async def signup(
      
      
      
-@user_router.post("/login/")
+@user_router.post("/login/", dependencies=[Depends(Timeout(route="login", seconds=3))])
 async def login(
      login_data: LogInModel,
      service: Annotated[AuthService, Depends(get_auth_service)],
