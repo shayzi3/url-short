@@ -18,10 +18,11 @@ class ResponseModel(BaseModel):
      message: str
      status: int
      
-     
+  
      
 class UserModel(BaseModel):
      username: str
+     is_admin: bool
      is_verifed: bool
      is_banned: bool
      created_at: datetime
@@ -52,6 +53,15 @@ class UserModel(BaseModel):
                model["urls"] = [UrlForUserModel.from_redis(obj) for obj in model["urls"]]
           return cls(**model)
      
+     @property
+     def redis_values(self) -> list[str]:
+          return [f"user:{self.username}"]
+     
+     
+     @property
+     def where(self) -> dict[str, str]:
+          return {"username": self.username}
+     
      
      
 class UrlModel(BaseModel):
@@ -65,6 +75,10 @@ class UrlModel(BaseModel):
           if user is None:
                return None
           return UserForUrlModel(**user.__dict__)
+     
+     @property
+     def redis_values(self) -> list[str]:
+          return [f"url:{self.id}"]
      
      
      
@@ -121,6 +135,7 @@ class TokenModel(BaseModel):
      
 class TokenPayloadModel(BaseModel):
      username: str
+     is_admin: bool
      is_banned: bool
      is_verifed: bool
      exp: datetime

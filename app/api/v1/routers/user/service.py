@@ -33,7 +33,8 @@ class AuthService:
           token = await access_security.create_token(
                username=data.username,
                is_banned=False,
-               is_verifed=False
+               is_verifed=False,
+               is_admin=False
           )
           return token
      
@@ -43,6 +44,7 @@ class AuthService:
                "password",
                "is_banned",
                "is_verifed",
+               "is_admin",
                username=data.username
           ) # read return list[password_user, is_banned, is_verifed]
           if user is None:
@@ -58,7 +60,8 @@ class AuthService:
           token = await access_security.create_token(
                username=data.username,
                is_banned=user[1],
-               is_verifed=user[2]
+               is_verifed=user[2],
+               is_admin=user[3]
           )
           return token
      

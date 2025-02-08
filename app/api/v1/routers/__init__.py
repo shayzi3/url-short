@@ -2,6 +2,7 @@ from .user import user_router
 from .email import email_router
 from .api_key import api_key_router
 from .url import url_router
+from .admin import admin_router
 
 
 __v1_routers__ = [
@@ -9,4 +10,5 @@ __v1_routers__ = [
      email_router,
      api_key_router,
      url_router,
+     admin_router,
 ]

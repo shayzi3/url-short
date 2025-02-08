@@ -7,7 +7,7 @@ from app.db.session import Session
 from app.services.redis import RedisPool
 
 
-
+TableColumn = Any
 PYDANTIC_MODEL = TypeVar("PYDANTIC_MODEL")
 ORM_MODELS = Union[User, Url, None]
 
@@ -104,12 +104,16 @@ class ParentRepository(Repository, Generic[PYDANTIC_MODEL], Session):
           
      async def delete(
           self, 
+          returning: Sequence[TableColumn] = [],
           redis_values: Sequence[str] = [],
           **where
-     ) -> None:
+     ) -> None | str:
           async with self.session.begin() as session:
-               sttm = delete(self.model).filter_by(**where)
-               await session.execute(sttm)
+               sttm = delete(self.model).filter_by(**where).returning(*returning)
+               status_delete = await session.execute(sttm)
+               
+               if not status_delete.fetchone():
+                    return "not_found"
                
                if redis_values:
                     await RedisPool().delete(*redis_values)

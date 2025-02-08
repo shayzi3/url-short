@@ -27,6 +27,7 @@ class User(Base):
      password: Mapped[str] = mapped_column()
      email: Mapped[str] = mapped_column()
      created_at: Mapped[datetime] = mapped_column(default=datetime.now())
+     is_admin: Mapped[bool] = mapped_column(default=False)
      is_verifed: Mapped[bool] = mapped_column(default=False)
      is_banned: Mapped[bool] = mapped_column(default=False)
      prefix: Mapped[str] = mapped_column(default=generate_prefix_for_model())
