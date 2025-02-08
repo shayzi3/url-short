@@ -42,6 +42,8 @@ class RequestAPIKey:
                "api_key", 
                "username",
                "prefix",
+               "is_banned",
+               "is_verifed",
                prefix=key[:7]
           )
           if user is None:
@@ -51,7 +53,9 @@ class RequestAPIKey:
           if check_token is True:
                return UserForApiKeyModel(
                     username=user[1],
-                    prefix=user[2]
+                    prefix=user[2],
+                    is_banned=[3],
+                    is_verifed=user[4],
                )
           raise self.__error
      

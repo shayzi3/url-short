@@ -1,3 +1,5 @@
+from functools import wraps
+from typing import Any, Callable
 from fastapi import status, HTTPException
 
 from app.api.dependencies.url import Payload
@@ -20,6 +22,27 @@ class UrlService:
           self.redis = redis
           
           
+     @staticmethod
+     def user_verifed_or_banned(func) -> Callable:
+          
+          @wraps(func)
+          async def wrapper(self, current_user: Payload, *args, **kwargs) -> Any:
+               if current_user.is_verifed is False:
+                    raise HTTPException(
+                         detail="Account is not verifed",
+                         status_code=status.HTTP_400_BAD_REQUEST
+                    )
+                    
+               if current_user.is_banned is True:
+                    raise HTTPException(
+                         detail="Account is banned",
+                         status_code=status.HTTP_400_BAD_REQUEST
+                    )
+               return await func(self, current_user, *args, **kwargs)
+          return wrapper
+          
+
+     @user_verifed_or_banned
      async def get_short_url(self, current_user: Payload, url: str) -> ReturnUrl:
           url_exists = await self.url_repository.read(url=url)
           if url_exists is not None:

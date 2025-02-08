@@ -96,6 +96,8 @@ class ApiKeyModel(BaseModel):
 class UserForApiKeyModel(BaseModel):
      username: str
      prefix: str
+     is_verifed: bool | None = None
+     is_banned: bool | None = None
      
      
      

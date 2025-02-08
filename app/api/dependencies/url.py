@@ -11,14 +11,16 @@ Payload = Union[TokenPayloadModel, UserForApiKeyModel]
 
 async def get_access_or_api(request: Request) -> Payload:
      access_token = request.cookies.get("access_token")
-     api_token = request.headers.get("x-api-key")
+     api_key = request.headers.get("x-api-key")
      
      if access_token is not None:
-          return await access_security(request)
+          return await access_security.decode_token(access_token)
      
-     if api_token is not None:
-          return await request_api_key(request)
-     raise HTTPException(
-          detail="You must send request with JWT Token or API Key",
-          status_code=status.HTTP_400_BAD_REQUEST
-     )
+     elif api_key is not None:
+          return await request_api_key.decode_api_key(api_key)
+     
+     else:
+          raise HTTPException(
+               detail="You must send request with JWT Token or API Key",
+               status_code=status.HTTP_400_BAD_REQUEST
+          )

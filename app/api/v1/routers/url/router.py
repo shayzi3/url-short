@@ -16,7 +16,7 @@ url_router = APIRouter(tags=["Url"])
 @url_router.post(
      path="/api/v1/url/",
      dependencies=[
-          Depends(Timeout(route="get_url", seconds=12))
+          Depends(Timeout(route="get_url", seconds=5))
      ]
 )
 async def get_short_url(
